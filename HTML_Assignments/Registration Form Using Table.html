@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Registration Form</title>
+	<style>
+		td{
+			width: 250px;
+		}
+		.button{
+			margin-left:350px ;
+			cursor:pointer;
+			height: 25px;
+			width: 100px;
+
+		}
+		.button:hover{
+			background-color:lightsteelblue;
+			border-radius: 7px;
+
+		}
+		th{
+			height: 50px;
+			font-family: Arial;
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<th colspan="4">Registration Form</th>
+		</tr>
+		<tr>
+			<td>Student Name</td>
+			<td><input type="Text" name="First Name" value="First Name"></td>
+			<td><input type="Text" name="Middle Name" value="Middle Name"></td>
+			<td><input type="Text" name="First Name" value="Last Name"></td>
+		</tr>
+		<tr>
+			<td>Father's Name</td>
+			<td><input type="Text" name="Father's Name" value="Father's Name"></td>
+			<td>Mother's Name</td>
+			<td><input type="Text" name="Mother's Name" value="Mother's Name"></td>
+		</tr>
+		<tr>
+			<td>Date Of Birth</td>
+			<td><input type="Date" name="Date"></td>
+			<td>Gendre</td>
+			<td><input type="Radio" name="Male">Male<input type="Radio" name="Female">Female</td>
+		</tr>
+		<tr>
+			<td>Category</td>
+			<td><input type="Radio"name="Gen">Gen<input type="Radio"name="OBC">OBC<input type="Radio"name="SC/ST">SC/ST</td>
+			<td>Handicapped</td>
+			<td><input type="Radio"name="Yes">Yes<input type="Radio"name="No">No</td>
+		</tr>
+		<tr>
+			<td>Ex-Serviceman</td>
+			<td><input type="Radio"name="Yes">Yes<input type="Radio"name="No">No</td>
+			<td>EWS</td>
+			<td><input type="Radio"name="Yes">Yes<input type="Radio"name="No">No</td>
+		</tr>
+		<tr>
+			<td>Email ID</td>
+			<td><input type="Text"name="Email ID"></td>
+			<td>Mobile No.</td>
+			<td><input type="Text"name="Mobile No"></td>
+		</tr>
+		<tr>
+			<td>State</td>
+			<td><select>
+				<option value="Goa">Goa</option>
+				<option value="Gujarat">Gujarat</option>
+				<option value="Maharashtra">Maharashtra</option>
+			</select></td>
+			<td>City</td>
+			<td>
+				<select>
+					<option value="Karad">Karad</option>
+					<option value="Satara">Satara</option>
+					<option value="Kolhapur">Kolhapur</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Upload Photo</td>
+			<td><button name="Choose File" value="Choose File">Choose File</td>
+			<td>Upload Signature</td>
+			<td><button name="Choose File" value="Choose File">Choose File</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td colspan="3"><button class="button" name="Submit">Submit</td>
+		</tr>
+		
+	</table>
+</body>
+</html>
