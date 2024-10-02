@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>New Members Registration</title>
+	<style>
+		.Body{
+			background-image: url(../image/Login_Page.jpg);
+			background-repeat: no-repeat;
+			background-size: 100% 150%;
+
+		}
+		.content{
+			color: white;
+			margin-left: 250px;
+		}
+		
+		h1{
+			margin-left:220px;
+			color: yellowgreen;
+			font-size: 40px;
+		}
+		button{
+			background-color:seagreen;
+			height: 40px;
+			width: 100px;
+			color: white;
+			cursor: pointer;
+			font-size: 25px;
+		}
+		button:hover{
+			background-color:khaki;
+			color: black;
+		}
+		.Border{
+			border: whitesmoke;
+			border-style: double;
+			margin-right: 550px;
+			padding: 10px;ad
+		}
+	</style>
+</head>
+<body class="Body">
+	<div class="Border">
+	<h1>Register New Member</h1>
+	<div class="content">
+<form>
+
+<label for ="Full Name">Full Name :</label>
+<input type="Text" name="Full Name"><br><br><br>
+<label for=" Email">Email :</label>
+<input type="Text" name="Email"><br><br><br>
+<label for ="Mobile Number">Mobile Number :</label>
+<input type="Text" name="Mobile Number"><br><br><br>
+<label for=" Gender">Gender :</label>
+<input type="Radio" name="Male">Male
+<input type="Radio" name="Female">Female
+<input type="Radio" name="Other">Other<br><br><br>
+<label for ="Address">Address :</label>
+<textarea name ="Address" cols="20"rows="3"></textarea><br><br><br>
+
+<label for="Designation">Designation :</label>
+<select >
+	<option value=" Principal">Principal</option>
+	<option value="Teacher">Teacher</option>
+	<option value="Staff">Staff</option>
+</select><br><br>
+
+<label for ="Department">Department :</label>
+<select >
+	<option value="Arts">Arts</option>
+	<option value="Commerce">Commerce</option>
+	<option value="Science">Science</option>
+	<option value="Account">Account</option>
+</select><br><br><br>
+<button>Submit</button>
+<button>Reset</button>
+</form>
+</div>
+</div>
+</body>
+</html>
