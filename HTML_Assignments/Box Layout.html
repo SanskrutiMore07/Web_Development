@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box Layout</title>
+  <style>
+    body{
+      width: 1000px;
+      height: 100%;
+      border: 2px solid black;
+      margin: 20px;
+      padding: 10px;
+    }
+     
+    nav{
+            border: 1px solid rgb(20, 20, 20);
+            height: 60px;
+            width: 980px;
+            margin: 10px;
+            background-color:slategrey;
+        }
+        #nav{
+            height: 40px;
+            width: 180px;
+            border: 1px solid black;
+            display: inline-block;
+            margin-top: 7px;
+            margin-inline: 5px;
+            background-color: white;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: blue;
+            font-size: 20px;
+            text-align: center;
+            padding-top:7px ;
+        }
+        #nav:hover{
+            background-color: orange;
+            color: aliceblue;
+            cursor: pointer;
+            border-radius: 7px;
+        }
+        .container{
+          display: flex;
+        }
+        #Image{
+          width: 40%;
+          height: 509px;
+          border: 2px solid black;
+          margin-left: 8px;
+        }
+        
+        .box_top{
+          display: inline-block;
+          height: 150px;
+          width: 220px;
+          border: 2px solid black;
+          margin: 20px 1px 5px 50px;
+
+        }
+         .box_bottom{
+          display: inline-block;
+          height: 150px;
+          width: 220px;
+          border: 2px solid black;
+          margin: 20px 1px 5px 50px;
+
+        }
+        .box_info{
+          display: inline-block;
+          height: 100px;
+          width: 500px;
+          border: 2px solid black;
+          margin: 20px 1px 5px 50px;
+        }
+   </style>
+</head>
+<body>
+  <nav>
+      <div id="nav">Home</div>
+      <div id="nav">About</div>
+      <div id="nav">Contact Us</div>
+      <div id="nav">Help</div>
+      <div id="nav">Tools</div>
+   </nav>
+
+  <div class="container">
+    <div id="Image" class="B"><img src="../Image/teacher student img.jpg"height="510px"width="400px"></div>
+    <div>
+    <div class="box_top"><img src="../Image/C_Sharp_Logo.png" height="150px" width="220px"></div>
+    <div class="box_top"><img src="../Image/css.jpg" height="150px" width="220px"></div>
+    <div class="box_info">
+  <p>A very popular yet not that complicated programming language, C language is considered an important component of short-term courses and degree programs like BSc Computer Science, Computer Science Engineering, etc. </p>
+    </div>
+    <div class="box_bottom"><img src="../Image/HTML_Logo.png" height="150px" width="220px"></div>
+    <div class="box_bottom"><img src="../Image/JavaScript_Logo.png" height="150px" width="220px"></div>
+  </div>
+  </div>
+</body>
+</html>
