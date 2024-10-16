@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Design Using Flex</title>
+    <style>
+        body{
+            width: 99%;
+            
+            border: 1px solid black;
+        }
+        .Nav{
+            display: flex;
+            background-color:lightblue ;
+            height: 60px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #N{
+            display: flex;
+            text-align: center;
+            background-color: yellow;
+            height: 40px;
+            width: 90px;
+            justify-content: center;
+            margin:10px;
+            padding: 5px;
+            font-size: 20px;
+
+        }
+        #N:hover{
+            background-color: wheat;
+            cursor: pointer;
+            border-radius: 7px;
+
+        }
+        content{
+            display: flex;
+        }
+        #top{
+            height:140px;
+            width: 300px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 20px;
+            flex-grow: grow;
+            background-color: yellow;
+            
+        }
+        #center{
+            height:150px;
+            width: 720px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 10px;
+            flex-grow: grow;
+        }
+        #down{
+            height:140px;
+            width: 300px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 20px;
+            background-color: yellow;
+       }
+       
+        
+    </style>
+</head>
+    <body>
+     <div class="Nav">
+       <div id="N">Home</div>
+       <div id="N">About Us</div>
+       <div id="N">Contact Us</div>
+       <div id="N">Tools</div>
+      </div>
+      <content>
+          <div><img src="../Image/teacher student img.jpg"height="540px"width="550px"></div>
+          <div>
+              <div id="top"></div>
+              <div id="top"></div>
+              <div id="center"><p>C is a general-purpose programming language created by Dennis Ritchie at the Bell Laboratories in It is a very popular language, despite being old. The main reason for its popularity is because it is a fundamental language in the field of computer science.C is strongly associated with UNIX, as it was developed to write the UNIX operating system.</p></div>
+              <div id="down"></div>
+              <div id="down"></div>
+          </div>
+      </content>
+
+    </body>
+</html>
