@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Design Using Flex</title>
+    <style>
+        body{
+            width: 99%;
+            height:60%;
+            border: 1px solid black;
+        }
+        .Nav{
+            display: flex;
+            background-color:lightblue ;
+            height: 60px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #N{
+            display: flex;
+            text-align: center;
+            background-color: yellow;
+            height: 40px;
+            width: 90px;
+            justify-content: center;
+            margin:10px;
+            padding: 5px;
+            font-size: 20px;
+
+        }
+        #N:hover{
+            background-color: wheat;
+            cursor: pointer;
+            border-radius: 7px;
+
+        }
+        main{
+            display: flex;
+        }
+        #top{
+            height:130px;
+            width: 300px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 20px;
+            margin-right:0px;
+            /*flex-grow: grow;*/
+            
+        }
+       
+        #center{
+            height:150px;
+            width: 700px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 10px;
+            flex-grow: grow;
+        }
+        #down{
+            height:130px;
+            width: 300px;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 20px;
+       }
+       
+        
+    </style>
+</head>
+    <body>
+     <div class="Nav">
+       <div id="N">Home</div>
+       <div id="N">About Us</div>
+       <div id="N">Contact Us</div>
+       <div id="N">Tools</div>
+      </div>
+      <main>
+          <div><img src="../Image/teacher student img.jpg"height="520px"width="550px"></div>
+          <div>
+              <div id="top"></div>
+              <div id="top" class="last"></div>
+              <div id="center"></div>
+              <div id="down"></div>
+              <div id="down"></div>
+          </div>
+    </main>
+    </body>
+</html>
