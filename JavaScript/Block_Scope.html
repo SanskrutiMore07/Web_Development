@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let & Const => Scope - Block scope</title>
+</head>
+<body>
+    <script>
+        function Hello()
+        {
+        let x= 20; //global
+        console.log(x);
+
+        if(true)
+    {
+        let y="Hello World";
+        console.log(y);
+    }
+    console.log(x);
+        }
+       Hello(); 
+    </script>
+</body>
+</html>
