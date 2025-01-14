@@ -10,10 +10,10 @@ let a= 5;
 let b= 2;
 
 console.log("a = ", a, "& b = ",b);
-console.log("a+b = ",a+b);
-console.log("a-b = ",a-b);
-console.log("a*b = ",a*b);
-console.log("a/b = ",a/b);
-console.log("a%b = ",a%b);
+console.log("a+b = ",a+b); add
+console.log("a-b = ",a-b); sub
+console.log("a*b = ",a*b); mult
+console.log("a/b = ",a/b); div
+console.log("a%b = ",a%b); modulo
 console.log("a**b = ",a**b);   //Exponentiation
 
