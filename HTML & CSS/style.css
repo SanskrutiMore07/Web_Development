@@ -1,0 +1,34 @@
+/*.A{
+	background-color:burlywood;
+	border: 1px solid black;
+	height: 554px;
+	width: 100%;
+}
+.box{
+	border: 2px solid black;
+	background-color: powderblue;
+	height: 4.8cm;
+	width: 4cm;
+	display:inline-block;
+} */
+body{
+	margin: 0%;
+}
+.A{
+	display: grid;
+	grid-template-columns:1fr ;
+	grid-gap: 20px;
+	background-color:pink;
+	border: 1px solid black;
+	/*grid-auto-rows: 100px;*/
+	grid-auto-columns: 150px;
+	
+
+}
+.box{
+	border: 2px solid black;
+	background-color: powderblue;
+	height: 4.8cm;
+	width: 4cm;
+	/*border-radius: 50%;*/
+}

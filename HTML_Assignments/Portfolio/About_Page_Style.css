@@ -1,0 +1,115 @@
+body{
+    margin: 0%;
+    /* border: 1px solid black; */
+    height: 100%;
+    width: 100%;
+    background-image: url('portfolio img.avif');
+    /* background-image: url('Img5.jpg'); */
+}
+.containner{
+    display: flex;
+    width: 100%;
+    /* min-height: 100vh; */
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    
+}
+#menu{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    width: 100%;   
+}
+.tital{
+    /* color: black;
+    font-size: 50px;
+    width:80%; */
+    width: 90%;
+    color: black;
+    font-size: 50px;
+    margin: 0px;
+    padding: 14px;
+    font-family:'Times New Roman', Times, serif;
+    text-align: center;
+    margin-left: 50px;
+}
+.btn-Back{
+
+    background-color: rgb(237, 175, 50);
+    color: rgb(12, 5, 1);
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 11px;
+    margin: 10px;
+   text-decoration: dotted;
+ 
+}
+.btn-Back:hover{
+    background-color: rgb(190, 237, 50);
+    color: rgb(3, 55, 6);
+    transition: 2s ease;
+    transition-property: background-color,color;
+    cursor: pointer;
+    border-radius: 7px;
+}
+#about .about{
+    flex-direction: column-reverse;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 20px;
+    
+}
+#about .col-left{
+    width: 250px;
+    height: 360px;
+   text-align: center;
+}
+#about .col-left .about-img{
+    display: flex;
+    flex-direction: column;
+}
+#about .col-right{
+    width:100%;
+}
+#about .col-right h2{
+    font-size: 35px;
+    /* margin-bottom: 0px; */
+    margin-top: 0px;
+}
+#about .col-right p{
+    margin-bottom: 20px;
+}
+#about .col-right .btn{
+    display: inline-block;
+    border: 2px solid black;
+    padding:  10px 30px;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 3s ease;
+    transition-property: background-color,color;
+    margin-bottom: 20px;
+}
+#about .col-right .btn:hover{
+    color: white;
+    background-color: rgb(72, 1, 1);
+    border-radius: 10px;
+}
+#about .col-left .about-img{
+    position: relative;
+}
+#about .col-left .about-img::after{
+content: '';
+position: absolute;
+left: -33px;
+top: 19px;
+height: 98%;
+width: 95%;
+border: 7px solid rgb(237, 215, 215);
+z-index: -1;
+}

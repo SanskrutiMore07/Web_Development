@@ -1,0 +1,74 @@
+body{
+    margin: 0%;
+    height: 100%;
+    width: 100%;
+    background-image: url('portfolio img.avif');
+    
+}
+.containner{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+#menu{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    width: 100%;   
+}
+.title{
+    width: 90%;
+    color: black;
+    font-size: 50px;
+    margin: 0px;
+    padding: 17px;
+    font-family:'Times New Roman', Times, serif;
+    text-align: center;
+    margin-left: 50px;
+}
+.btn-Back{
+
+    background-color: rgb(237, 175, 50);
+    color: rgb(12, 5, 1);
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 11px;
+    margin: 10px;
+    text-decoration: none;
+ 
+}
+.btn-Back:hover{
+    background-color: rgb(190, 237, 50);
+    color: rgb(3, 55, 6);
+    transition: 2s ease;
+    transition-property: background-color,color;
+    cursor: pointer;
+    border-radius: 7px;
+}
+#contact .contact{
+    flex-direction: column;
+    max-width: 100%;
+    justify-content: center;
+}
+.icon{
+    color: black;
+    font-size: large;
+}
+
+#contact .contact-item{
+    width: 280px;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 5px 5px 18px 0 black;
+    background-color: transparent;
+    color: whitesmoke;
+    
+}
