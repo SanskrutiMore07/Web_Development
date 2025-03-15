@@ -1,0 +1,9 @@
+#Box{
+    height:400px;
+    width: 200px;
+    color: white;
+    background-color: navy;
+    text-align: center;
+    border: 1px solid black;
+    
+}
