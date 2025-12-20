@@ -1,0 +1,6 @@
+let a = 5 ;
+let b = 4;
+
+console.log("a == b", a == b);
+console.log("a != b", a != b);
+console.log("5>3",a>b);
