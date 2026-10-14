@@ -1,0 +1,9 @@
+console.log(Math.abs(-4));
+console.log(Math.PI);
+console.log(Math.LN10);
+console.log(Math.SQRT2);
+console.log(Math.ceil(2.3))
+console.log(Math.floor(2.3))
+console.log(Math.log10(20))
+console.log(Math.max(12,200,35))
+console.log(Math.random())
