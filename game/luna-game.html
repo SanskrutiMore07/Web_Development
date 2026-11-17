@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LUNA — The Lost Dream</title>
+  <style>
+    :root {
+      --bg-deep: #0b071d;
+      --panel: rgba(23, 14, 54, 0.78);
+      --panel-border: rgba(244, 182, 255, 0.32);
+      --gold: #ffd464;
+      --gold-bright: #fff0a8;
+      --pink: #ff79c6;
+      --lavender: #c792ea;
+      --sky: #7dd3fc;
+      --text: #f8f5ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 20%, #24124d 0%, #0d0824 65%, #060312 100%);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #game-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1120px;
+      max-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 16px;
+      box-shadow:
+        0 0 0 1px rgba(255, 212, 100, 0.25),
+        0 20px 60px rgba(0, 0, 0, 0.75),
+        0 0 90px rgba(199, 146, 234, 0.18);
+      background: #0d0824;
+    }
+
+    /* Top HUD */
+    #hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+
+    #hud.active {
+      display: flex;
+    }
+
+    .hud-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .badge .val {
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .badge.pink .val {
+      color: var(--pink);
+    }
+
+    .badge.sky .val {
+      color: var(--sky);
+    }
+
+    .hud-btn {
+      pointer-events: auto;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .hud-btn:hover {
+      border-color: var(--gold);
+      background: rgba(52, 29, 108, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .hud-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Overlays (Start, Pause, Game Over, Victory) */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 35%, rgba(44, 21, 92, 0.72), rgba(7, 4, 22, 0.92));
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      z-index: 20;
+      transition: opacity 0.25s ease;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--pink);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1.08;
+      background: linear-gradient(120deg, #fff6cc 0%, #ffd464 35%, #ff8ad4 70%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 20px rgba(255, 138, 212, 0.35));
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: clamp(14px, 2vw, 17px);
+      color: #d8c8ff;
+      max-width: 560px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .level-pills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(210px, 1fr));
+      gap: 8px;
+      max-width: 580px;
+      width: 100%;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 212, 100, 0.22);
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .pill strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 2px;
+      font-size: 12.5px;
+    }
+
+    .controls-hint {
+      font-size: 12px;
+      color: #b8a6eb;
+      margin-bottom: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(199, 146, 234, 0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #ff79c6 0%, #c084fc 50%, #ffd464 100%);
+      color: #14082b;
+      border: none;
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(255, 121, 198, 0.4);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 34px rgba(255, 212, 100, 0.5);
+    }
+
+    .secondary-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid var(--panel-border);
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .stats-grid {
+      display: flex;
+      gap: 14px;
+      margin: 14px 0 22px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 12px 18px;
+      min-width: 120px;
+    }
+
+    .stat-card span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #c7b8f5;
+    }
+
+    .stat-card b {
+      font-size: 22px;
+      color: var(--gold);
+    }
+
+    /* Mobile Touch Controls */
+    #touch-controls {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: none;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      z-index: 12;
+    }
+
+    @media (pointer: coarse), (max-width: 820px) {
+      #touch-controls.active {
+        display: flex;
+      }
+      canvas {
+        border-radius: 0;
+      }
+      #game-wrapper {
+        max-width: 100vw;
+        max-height: 100vh;
+      }
+      .level-pills {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .touch-cluster {
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .touch-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(26, 15, 62, 0.72);
+      border: 1.5px solid rgba(255, 212, 100, 0.45);
+      color: #fff6cc;
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .touch-btn:active,
+    .touch-btn.pressed {
+      background: rgba(255, 121, 198, 0.45);
+      border-color: var(--gold-bright);
+      transform: scale(0.94);
+    }
+  </style>
+</head>
+<body>
+  <div id="game-wrapper">
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+      <div class="hud-group">
+        <div class="badge"><span>Level</span> <span class="val" id="hud-level">1/4</span></div>
+        <div class="badge"><span id="hud-level-name">Dark Forest</span></div>
+        <div class="badge"><span>Lives</span> <span class="val" id="hud-lives">❤️❤️❤️</span></div>
+        <div class="badge pink"><span>Stars</span> <span class="val" id="hud-stars">0/2</span></div>
+        <div class="badge sky"><span>Goal</span> <span class="val" id="hud-goal">—</span></div>
+      </div>
+      <div class="hud-group">
+        <div class="badge"><span>Score</span> <span class="val" id="hud-score">0</span></div>
+        <div class="badge sky"><span>Time</span> <span class="val" id="hud-time">00:00</span></div>
+        <button class="hud-btn" id="btn-pause">Pause</button>
+        <button class="hud-btn" id="btn-restart">Restart</button>
+      </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="overlay" id="start-screen">
+      <div class="eyebrow">A Starlight Story</div>
+      <h1>LUNA — The Lost Dream</h1>
+      <p class="subtitle">
+        A dark shadow stole the stars from Luna's dream world. Guide Luna across 4 magical realms,
+        collect the stars, awaken the Moon Crystal, and bring back the golden dawn.
+      </p>
+
+      <div class="level-pills">
+        <div class="pill"><strong>1. Dark Forest</strong>Collect 2 magical stars</div>
+        <div class="pill"><strong>2. Secret Garden</strong>Collect 1 magical star &amp; butterflies</div>
+        <div class="pill"><strong>3. Floating Sky</strong>Collect 2 magical stars &amp; dodge wisps</div>
+        <div class="pill"><strong>4. The Last Dream</strong>Activate Moon Crystal &amp; defeat Dark Shadow</div>
+      </div>
+
+      <div class="controls-hint">
+        <b>Keyboard:</b> Move <code>A/D</code> or <code>←/→</code> · Jump / Glide <code>Space</code> or <code>W/↑</code> · Star-Pulse <code>E</code> or <code>Shift</code> · Pause <code>P</code>
+      </div>
+
+      <div class="btn-row">
+        <button class="primary-btn" id="btn-start">Begin Dream Journey</button>
+      </div>
+    </div>
+
+    <!-- Pause Screen -->
+    <div class="overlay hidden" id="pause-screen">
+      <div class="eyebrow">Dream Paused</div>
+      <h1>Rest in Starlight</h1>
+      <p class="subtitle">Take a breath, Luna. Your stars and timer are safe.</p>
+      <div class="btn-row">
+        <button class="primary-btn" id="btn-resume">Resume</button>
+        <button class="secondary-btn" id="btn-pause-restart">Restart Game</button>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="overlay hidden" id="gameover-screen">
+      <div class="eyebrow">The Shadow Fades to Mist</div>
+      <h1>Dream Faded</h1>
+      <p class="subtitle" id="gameover-reason">Luna ran out of starlight, but every dream can begin again.</p>
+      <div class="stats-grid">
+        <div class="stat-card"><span>Final Score</span><b id="go-score">0</b></div>
+        <div class="stat-card"><span>Level Reached</span><b id="go-level">1/4</b></div>
+        <div class="stat-card"><span>Time</span><b id="go-time">00:00</b></div>
+      </div>
+      <div class="btn-row">
+        <button class="primary-btn" id="btn-retry">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div class="overlay hidden" id="victory-screen">
+      <div class="eyebrow">The Golden Dawn Returns</div>
+      <h1>Dream Restored!</h1>
+      <p class="subtitle">
+        Luna awakened the Moon Crystal and turned the Dark Shadow into a friendly midnight guardian.
+        Pink blooms, glowing crystals, and golden stars shine once more!
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card"><span>Total Score</span><b id="win-score">0</b></div>
+        <div class="stat-card"><span>Lives Left</span><b id="win-lives">3</b></div>
+        <div class="stat-card"><span>Total Time</span><b id="win-time">00:00</b></div>
+      </div>
+      <div class="btn-row">
+        <button class="primary-btn" id="btn-play-again">Play Again</button>
+      </div>
+    </div>
+
+    <!-- Mobile Touch Controls -->
+    <div id="touch-controls">
+      <div class="touch-cluster">
+        <button class="touch-btn" id="t-left" aria-label="Move Left">◀</button>
+        <button class="touch-btn" id="t-right" aria-label="Move Right">▶</button>
+      </div>
+      <div class="touch-cluster">
+        <button class="touch-btn" id="t-pulse" aria-label="Star Pulse">✦</button>
+        <button class="touch-btn" id="t-jump" aria-label="Jump">▲</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // UI Elements
+      const hud = document.getElementById("hud");
+      const hudLevel = document.getElementById("hud-level");
+      const hudLevelName = document.getElementById("hud-level-name");
+      const hudLives = document.getElementById("hud-lives");
+      const hudStars = document.getElementById("hud-stars");
+      const hudGoal = document.getElementById("hud-goal");
+      const hudScore = document.getElementById("hud-score");
+      const hudTime = document.getElementById("hud-time");
+
+      const startScreen = document.getElementById("start-screen");
+      const pauseScreen = document.getElementById("pause-screen");
+      const gameoverScreen = document.getElementById("gameover-screen");
+      const victoryScreen = document.getElementById("victory-screen");
+      const touchControls = document.getElementById("touch-controls");
+
+      const btnStart = document.getElementById("btn-start");
+      const btnPause = document.getElementById("btn-pause");
+      const btnResume = document.getElementById("btn-resume");
+      const btnRestart = document.getElementById("btn-restart");
+      const btnPauseRestart = document.getElementById("btn-pause-restart");
+      const btnRetry = document.getElementById("btn-retry");
+      const btnPlayAgain = document.getElementById("btn-play-again");
+
+      // Subtle WebAudio Chimes (no external assets needed)
+      let audioCtx = null;
+      function playTone(freq = 520, duration = 0.16, type = "sine", gainVal = 0.06) {
+        try {
+          if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === "suspended") audioCtx.resume();
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.35, audioCtx.currentTime + duration);
+          gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (_) {}
+      }
+
+      // Game State
+      const W = 960;
+      const H = 540;
+
+      const state = {
+        mode: "start", // start | playing | paused | gameover | victory
+        levelIndex: 0,
+        score: 0,
+        lives: 3,
+        elapsed: 0,
+        levelRestored: 0,
+        shake: 0,
+        bannerText: "",
+        bannerTimer: 0
+      };
+
+      const keys = {
+        left: false,
+        right: false,
+        jump: false,
+        jumpPressed: false,
+        pulsePressed: false
+      };
+
+      // Background ambient stars
+      const bgStars = Array.from({ length: 75 }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * (H * 0.78),
+        r: 0.7 + Math.random() * 2.1,
+        twinkle: Math.random() * Math.PI * 2,
+        speed: 0.4 + Math.random() * 1.2
+      }));
+
+      let particles = [];
+      let pulseRings = [];
+
+      function spawnParticles(x, y, color, count = 14, speed = 3.2) {
+        for (let i = 0; i < count; i++) {
+          const ang = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+          const spd = (0.35 + Math.random() * 0.85) * speed;
+          particles.push({
+            x,
+            y,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 0.6,
+            life: 26 + Math.random() * 22,
+            maxLife: 48,
+            r: 2 + Math.random() * 3,
+            color
+          });
+        }
+      }
+
+      // Player: Luna
+      const luna = {
+        x: 80,
+        y: 360,
+        w: 28,
+        h: 44,
+        vx: 0,
+        vy: 0,
+        onGround: false,
+        facing: 1,
+        invuln: 0,
+        pulseCooldown: 0,
+        animTime: 0
+      };
+
+      // Level Definitions (4 Levels as requested)
+      function createLevels() {
+        return [
+          // LEVEL 1: Dark Forest - collect 2 magical stars
+          {
+            name: "Dark Forest",
+            palette: { top: "#0b0622", mid: "#1c1046", bot: "#2f1759", accent: "#ff79c6" },
+            goalType: "stars",
+            requiredStars: 2,
+            platforms: [
+              { x: 0, y: 470, w: 960, h: 70, kind: "moss" },
+              { x: 150, y: 395, w: 150, h: 16, kind: "crystal" },
+              { x: 380, y: 335, w: 170, h: 16, kind: "moss" },
+              { x: 630, y: 385, w: 160, h: 16, kind: "crystal" },
+              { x: 770, y: 295, w: 150, h: 16, kind: "moss" }
+            ],
+            stars: [
+              { x: 465, y: 292, collected: false, bob: 0 },
+              { x: 845, y: 252, collected: false, bob: 1.5 }
+            ],
+            butterflies: [],
+            hazards: [
+              { x: 310, y: 446, w: 26, h: 24, vx: 1.5, minX: 250, maxX: 520, type: "wisp" },
+              { x: 660, y: 446, w: 26, h: 24, vx: -1.6, minX: 580, maxX: 880, type: "wisp" }
+            ],
+            crystal: null,
+            shadowBoss: null,
+            portal: { x: 890, y: 235, w: 42, h: 56, active: false }
+          },
+
+          // LEVEL 2: Secret Garden - collect 1 magical star and butterflies
+          {
+            name: "Secret Garden",
+            palette: { top: "#12082b", mid: "#2b135c", bot: "#4a1966", accent: "#ff9de2" },
+            goalType: "star_and_butterflies",
+            requiredStars: 1,
+            requiredButterflies: 5,
+            platforms: [
+              { x: 0, y: 475, w: 960, h: 65, kind: "garden" },
+              { x: 110, y: 390, w: 155, h: 16, kind: "garden" },
+              { x: 330, y: 320, w: 165, h: 16, kind: "crystal" },
+              { x: 560, y: 265, w: 165, h: 16, kind: "garden" },
+              { x: 750, y: 350, w: 175, h: 16, kind: "crystal" }
+            ],
+            stars: [
+              { x: 642, y: 222, collected: false, bob: 0.7 }
+            ],
+            butterflies: [
+              { x: 185, y: 352, collected: false, phase: 0 },
+              { x: 410, y: 282, collected: false, phase: 1.1 },
+              { x: 480, y: 435, collected: false, phase: 2.2 },
+              { x: 790, y: 312, collected: false, phase: 3.3 },
+              { x: 870, y: 312, collected: false, phase: 4.4 }
+            ],
+            hazards: [
+              { x: 280, y: 450, w: 26, h: 24, vx: 1.8, minX: 160, maxX: 500, type: "wisp" },
+              { x: 600, y: 450, w: 26, h: 24, vx: -1.9, minX: 520, maxX: 890, type: "wisp" }
+            ],
+            crystal: null,
+            shadowBoss: null,
+            portal: { x: 880, y: 290, w: 42, h: 56, active: false }
+          },
+
+          // LEVEL 3: Floating Sky - collect 2 magical stars while avoiding obstacles
+          {
+            name: "Floating Sky",
+            palette: { top: "#091538", mid: "#1c2a6b", bot: "#3c2778", accent: "#7dd3fc" },
+            goalType: "stars",
+            requiredStars: 2,
+            platforms: [
+              { x: 20, y: 465, w: 150, h: 16, kind: "cloud" },
+              { x: 220, y: 400, w: 140, h: 16, kind: "cloud", mvX: 1.3, minX: 190, maxX: 310 },
+              { x: 420, y: 330, w: 140, h: 16, kind: "cloud" },
+              { x: 615, y: 265, w: 140, h: 16, kind: "cloud", mvX: -1.4, minX: 550, maxX: 690 },
+              { x: 785, y: 330, w: 155, h: 16, kind: "cloud" }
+            ],
+            stars: [
+              { x: 490, y: 286, collected: false, bob: 0.4 },
+              { x: 862, y: 286, collected: false, bob: 2.1 }
+            ],
+            butterflies: [],
+            hazards: [
+              { x: 310, y: 350, w: 26, h: 24, vx: 2.1, minX: 210, maxX: 460, type: "wisp" },
+              { x: 540, y: 280, w: 26, h: 24, vx: -2.2, minX: 430, maxX: 730, type: "wisp" },
+              { x: 710, y: 410, w: 26, h: 24, vx: 2.0, minX: 520, maxX: 900, type: "wisp" }
+            ],
+            crystal: null,
+            shadowBoss: null,
+            portal: { x: 888, y: 270, w: 42, h: 56, active: false }
+          },
+
+          // LEVEL 4: The Last Dream - activate the moon crystal and defeat the dark shadow
+          {
+            name: "The Last Dream",
+            palette: { top: "#08051a", mid: "#1f1047", bot: "#3d1b68", accent: "#ffd464" },
+            goalType: "final",
+            platforms: [
+              { x: 0, y: 475, w: 960, h: 65, kind: "sanctuary" },
+              { x: 135, y: 375, w: 160, h: 16, kind: "crystal" },
+              { x: 665, y: 375, w: 160, h: 16, kind: "crystal" },
+              { x: 395, y: 300, w: 170, h: 16, kind: "sanctuary" }
+            ],
+            stars: [],
+            butterflies: [],
+            hazards: [
+              { x: 320, y: 448, w: 26, h: 24, vx: 2.2, minX: 120, maxX: 820, type: "wisp" }
+            ],
+            // Moon Crystal: Luna pulses near it (or touches it) to activate!
+            crystal: {
+              x: 480,
+              y: 252,
+              r: 22,
+              activated: false
+            },
+            // Dark Shadow Boss: weakened by Star-Pulse once Moon Crystal is active
+            shadowBoss: {
+              x: 740,
+              y: 415,
+              w: 64,
+              h: 60,
+              vx: -2.1,
+              minX: 540,
+              maxX: 880,
+              hp: 3,
+              maxHp: 3,
+              stunTimer: 0,
+              defeated: false
+            },
+            portal: { x: 885, y: 415, w: 42, h: 56, active: false }
+          }
+        ];
+      }
+
+      let levels = createLevels();
+
+      function currentLevel() {
+        return levels[state.levelIndex];
+      }
+
+      function resetLunaToSpawn() {
+        luna.x = 70;
+        luna.y = 400;
+        luna.vx = 0;
+        luna.vy = 0;
+        luna.onGround = false;
+        luna.facing = 1;
+        luna.invuln = 65;
+      }
+
+      function loadLevel(idx, keepScoreAndLives = true) {
+        state.levelIndex = idx;
+        if (!keepScoreAndLives) {
+          state.score = 0;
+          state.lives = 3;
+          state.elapsed = 0;
+          state.levelRestored = 0;
+        }
+        levels = createLevels();
+        particles = [];
+        pulseRings = [];
+        resetLunaToSpawn();
+        const lvl = currentLevel();
+        showBanner(`Level ${idx + 1}: ${lvl.name}`);
+        updateHUD();
+      }
+
+      function showBanner(text) {
+        state.bannerText = text;
+        state.bannerTimer = 135;
+      }
+
+      function formatTime(sec) {
+        const s = Math.floor(sec);
+        const m = String(Math.floor(s / 60)).padStart(2, "0");
+        const r = String(s % 60).padStart(2, "0");
+        return `${m}:${r}`;
+      }
+
+      function updateHUD() {
+        const lvl = currentLevel();
+        hudLevel.textContent = `${state.levelIndex + 1}/4`;
+        hudLevelName.textContent = lvl.name;
+        hudLives.textContent = "❤️".repeat(Math.max(0, state.lives)) || "0";
+        hudScore.textContent = state.score;
+        hudTime.textContent = formatTime(state.elapsed);
+
+        const collectedStars = lvl.stars.filter(s => s.collected).length;
+        if (lvl.goalType === "stars") {
+          hudStars.textContent = `${collectedStars}/${lvl.requiredStars}`;
+          hudGoal.textContent = lvl.portal.active ? "Enter Star Gate!" : `Collect ${lvl.requiredStars} Stars`;
+        } else if (lvl.goalType === "star_and_butterflies") {
+          const bf = lvl.butterflies.filter(b => b.collected).length;
+          hudStars.textContent = `${collectedStars}/${lvl.requiredStars}`;
+          hudGoal.textContent = lvl.portal.active
+            ? "Enter Star Gate!"
+            : `Star ${collectedStars}/${lvl.requiredStars} · Butterflies ${bf}/${lvl.requiredButterflies}`;
+        } else {
+          hudStars.textContent = lvl.crystal.activated ? "Crystal Lit!" : "Dormant";
+          if (!lvl.crystal.activated) {
+            hudGoal.textContent = "Pulse Moon Crystal";
+          } else if (!lvl.shadowBoss.defeated) {
+            hudGoal.textContent = `Pulse Dark Shadow (${lvl.shadowBoss.hp})`;
+          } else {
+            hudGoal.textContent = "Enter Dawn Gate!";
+          }
+        }
+      }
+
+      // Star-Pulse ability
+      function triggerStarPulse() {
+        if (state.mode !== "playing" || luna.pulseCooldown > 0) return;
+        luna.pulseCooldown = 28;
+        pulseRings.push({
+          x: luna.x + luna.w / 2,
+          y: luna.y + luna.h / 2,
+          r: 14,
+          maxR: 145,
+          alpha: 0.95
+        });
+        spawnParticles(luna.x + luna.w / 2, luna.y + luna.h / 2, "#ffd464", 16, 3.6);
+        playTone(660, 0.18, "triangle", 0.06);
+
+        const lvl = currentLevel();
+        const cx = luna.x + luna.w / 2;
+        const cy = luna.y + luna.h / 2;
+
+        // Push away nearby shadow wisps
+        lvl.hazards.forEach(h => {
+          const hx = h.x + h.w / 2;
+          const hy = h.y + h.h / 2;
+          if (Math.hypot(hx - cx, hy - cy) < 155) {
+            h.vx *= -1;
+            spawnParticles(hx, hy, "#c792ea", 10, 2.5);
+          }
+        });
+
+        // Level 4: Activate Moon Crystal or damage Dark Shadow
+        if (lvl.goalType === "final") {
+          if (lvl.crystal && !lvl.crystal.activated) {
+            if (Math.hypot(lvl.crystal.x - cx, lvl.crystal.y - cy) < 175) {
+              lvl.crystal.activated = true;
+              state.score += 250;
+              state.levelRestored = 1;
+              showBanner("Moon Crystal Activated! Pulse the Dark Shadow!");
+              spawnParticles(lvl.crystal.x, lvl.crystal.y, "#ffd464", 28, 4.5);
+              playTone(880, 0.35, "sine", 0.08);
+              updateHUD();
+            }
+          } else if (lvl.shadowBoss && !lvl.shadowBoss.defeated && lvl.shadowBoss.stunTimer <= 0) {
+            const bx = lvl.shadowBoss.x + lvl.shadowBoss.w / 2;
+            const by = lvl.shadowBoss.y + lvl.shadowBoss.h / 2;
+            if (Math.hypot(bx - cx, by - cy) < 185) {
+              lvl.shadowBoss.hp -= 1;
+              lvl.shadowBoss.stunTimer = 55;
+              state.score += 300;
+              state.shake = 10;
+              spawnParticles(bx, by, "#ff79c6", 24, 4.2);
+              playTone(440, 0.25, "sawtooth", 0.05);
+
+              if (lvl.shadowBoss.hp <= 0) {
+                lvl.shadowBoss.defeated = true;
+                lvl.portal.active = true;
+                state.score += 500;
+                showBanner("Dark Shadow Purified! Enter the Dawn Gate!");
+                spawnParticles(bx, by, "#fff0a8", 45, 5.5);
+                playTone(988, 0.45, "triangle", 0.08);
+              }
+              updateHUD();
+            }
+          }
+        }
+      }
+
+      function rectsOverlap(a, b) {
+        return (
+          a.x < b.x + b.w &&
+          a.x + a.w > b.x &&
+          a.y < b.y + b.h &&
+          a.y + a.h > b.y
+        );
+      }
+
+      function hurtLuna(reasonText) {
+        if (luna.invuln > 0 || state.mode !== "playing") return;
+        state.lives -= 1;
+        state.shake = 12;
+        spawnParticles(luna.x + luna.w / 2, luna.y + luna.h / 2, "#ff79c6", 20, 3.8);
+        playTone(220, 0.25, "sine", 0.07);
+        updateHUD();
+
+        if (state.lives <= 0) {
+          endGame(false, reasonText || "The shadows overwhelmed Luna's lantern.");
+        } else {
+          showBanner("Ouch! Back to checkpoint lantern...");
+          resetLunaToSpawn();
+        }
+      }
+
+      function checkLevelCompletion() {
+        const lvl = currentLevel();
+        if (lvl.goalType === "stars") {
+          const got = lvl.stars.filter(s => s.collected).length;
+          if (got >= lvl.requiredStars) lvl.portal.active = true;
+        } else if (lvl.goalType === "star_and_butterflies") {
+          const gotS = lvl.stars.filter(s => s.collected).length;
+          const gotB = lvl.butterflies.filter(b => b.collected).length;
+          if (gotS >= lvl.requiredStars && gotB >= lvl.requiredButterflies) {
+            lvl.portal.active = true;
+          }
+        }
+
+        if (lvl.portal.active && rectsOverlap(luna, lvl.portal)) {
+          state.score += 200;
+          playTone(784, 0.3, "triangle", 0.07);
+          if (state.levelIndex < levels.length - 1) {
+            loadLevel(state.levelIndex + 1, true);
+          } else {
+            endGame(true);
+          }
+        }
+      }
+
+      function endGame(victory) {
+        hud.classList.remove("active");
+        touchControls.classList.remove("active");
+
+        if (victory) {
+          state.mode = "victory";
+          document.getElementById("win-score").textContent = state.score;
+          document.getElementById("win-lives").textContent = state.lives;
+          document.getElementById("win-time").textContent = formatTime(state.elapsed);
+          victoryScreen.classList.remove("hidden");
+        } else {
+          state.mode = "gameover";
+          document.getElementById("go-score").textContent = state.score;
+          document.getElementById("go-level").textContent = `${state.levelIndex + 1}/4`;
+          document.getElementById("go-time").textContent = formatTime(state.elapsed);
+          gameoverScreen.classList.remove("hidden");
+        }
+      }
+
+      // Main Update Loop
+      function update() {
+        if (state.mode !== "playing") return;
+
+        state.elapsed += 1 / 60;
+        if (state.bannerTimer > 0) state.bannerTimer--;
+        if (state.shake > 0) state.shake *= 0.85;
+
+        const lvl = currentLevel();
+
+        // Moving platforms
+        lvl.platforms.forEach(p => {
+          if (p.mvX) {
+            p.x += p.mvX;
+            if (p.x < p.minX || p.x + p.w > p.maxX) {
+              p.mvX *= -1;
+              if (rectsOverlap(luna, { x: p.x, y: p.y - 4, w: p.w, h: p.h + 4 })) {
+                luna.x += p.mvX;
+              }
+            }
+          }
+        });
+
+        // Horizontal movement
+        const accel = luna.onGround ? 0.85 : 0.55;
+        const maxSpeed = 4.6;
+        if (keys.left) {
+          luna.vx -= accel;
+          luna.facing = -1;
+        } else if (keys.right) {
+          luna.vx += accel;
+          luna.facing = 1;
+        } else {
+          luna.vx *= luna.onGround ? 0.78 : 0.9;
+        }
+        luna.vx = Math.max(-maxSpeed, Math.min(maxSpeed, luna.vx));
+
+        // Jump + Star-Glide
+        if (keys.jumpPressed && luna.onGround) {
+          luna.vy = -11.4;
+          luna.onGround = false;
+          spawnParticles(luna.x + luna.w / 2, luna.y + luna.h, "#ffd464", 8, 2.2);
+          playTone(523, 0.12, "sine", 0.05);
+        }
+        keys.jumpPressed = false;
+
+        // Gravity (gentler when holding jump while falling = Star-Glide)
+        const gliding = !luna.onGround && luna.vy > 0 && keys.jump;
+        luna.vy += gliding ? 0.18 : 0.48;
+        if (gliding && luna.vy > 1.8) luna.vy = 1.8;
+
+        // Move X & collide
+        luna.x += luna.vx;
+        if (luna.x < 8) {
+          luna.x = 8;
+          luna.vx = 0;
+        }
+        if (luna.x + luna.w > W - 8) {
+          luna.x = W - 8 - luna.w;
+          luna.vx = 0;
+        }
+
+        // Move Y & collide platforms
+        const prevBottom = luna.y + luna.h;
+        luna.y += luna.vy;
+        luna.onGround = false;
+
+        for (const p of lvl.platforms) {
+          const withinX = luna.x + luna.w > p.x + 4 && luna.x < p.x + p.w - 4;
+          if (withinX && luna.vy >= 0 && prevBottom <= p.y + 10 && luna.y + luna.h >= p.y) {
+            luna.y = p.y - luna.h;
+            luna.vy = 0;
+            luna.onGround = true;
+            if (p.mvX) luna.x += p.mvX;
+          }
+        }
+
+        if (luna.y > H + 40) {
+          hurtLuna("Luna tumbled into the deep dream mist.");
+        }
+
+        if (luna.invuln > 0) luna.invuln--;
+        if (luna.pulseCooldown > 0) luna.pulseCooldown--;
+        luna.animTime += 0.14;
+
+        if (keys.pulsePressed) {
+          keys.pulsePressed = false;
+          triggerStarPulse();
+        }
+
+        // Stars collection
+        lvl.stars.forEach(star => {
+          if (!star.collected) {
+            star.bob += 0.06;
+            const sy = star.y + Math.sin(star.bob) * 5;
+            if (Math.hypot(luna.x + luna.w / 2 - star.x, luna.y + luna.h / 2 - sy) < 32) {
+              star.collected = true;
+              state.score += 150;
+              spawnParticles(star.x, sy, "#ffd464", 18, 3.5);
+              playTone(740, 0.22, "triangle", 0.06);
+              checkLevelCompletion();
+            }
+          }
+        });
+
+        // Butterflies collection (Level 2)
+        lvl.butterflies.forEach(bf => {
+          if (!bf.collected) {
+            bf.phase += 0.07;
+            const bx = bf.x + Math.cos(bf.phase) * 10;
+            const by = bf.y + Math.sin(bf.phase * 1.4) * 7;
+            if (Math.hypot(luna.x + luna.w / 2 - bx, luna.y + luna.h / 2 - by) < 30) {
+              bf.collected = true;
+              state.score += 80;
+              spawnParticles(bx, by, "#ff9de2", 12, 2.6);
+              playTone(880, 0.14, "sine", 0.05);
+              checkLevelCompletion();
+            }
+          }
+        });
+
+        // Hazards
+        lvl.hazards.forEach(h => {
+          h.x += h.vx;
+          if (h.x < h.minX || h.x + h.w > h.maxX) h.vx *= -1;
+          if (rectsOverlap(luna, h)) {
+            hurtLuna("A Shadow Wisp dimmed Luna's starlight.");
+          }
+        });
+
+        // Level 4 Moon Crystal touch activation fallback + Boss movement
+        if (lvl.goalType === "final") {
+          if (lvl.crystal && !lvl.crystal.activated) {
+            if (Math.hypot(luna.x + luna.w / 2 - lvl.crystal.x, luna.y + luna.h / 2 - lvl.crystal.y) < 42) {
+              lvl.crystal.activated = true;
+              state.score += 250;
+              showBanner("Moon Crystal Activated! Use Star-Pulse on Dark Shadow!");
+              spawnParticles(lvl.crystal.x, lvl.crystal.y, "#ffd464", 26, 4.2);
+              playTone(880, 0.3, "sine", 0.07);
+            }
+          }
+          if (lvl.shadowBoss && !lvl.shadowBoss.defeated) {
+            if (lvl.shadowBoss.stunTimer > 0) {
+              lvl.shadowBoss.stunTimer--;
+            } else {
+              lvl.shadowBoss.x += lvl.shadowBoss.vx;
+              if (lvl.shadowBoss.x < lvl.shadowBoss.minX || lvl.shadowBoss.x + lvl.shadowBoss.w > lvl.shadowBoss.maxX) {
+                lvl.shadowBoss.vx *= -1;
+              }
+            }
+            if (rectsOverlap(luna, lvl.shadowBoss)) {
+              hurtLuna("The Dark Shadow caught Luna!");
+            }
+          }
+        }
+
+        checkLevelCompletion();
+
+        // Update particles & pulse rings
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.06;
+          p.life--;
+        });
+        particles = particles.filter(p => p.life > 0);
+
+        pulseRings.forEach(r => {
+          r.r += 6.5;
+          r.alpha *= 0.91;
+        });
+        pulseRings = pulseRings.filter(r => r.alpha > 0.04);
+
+        updateHUD();
+      }
+
+      // Drawing Helpers
+      function drawStarShape(x, y, spikes, outerR, innerR, fill, stroke) {
+        ctx.save();
+        ctx.beginPath();
+        let rot = (Math.PI / 2) * 3;
+        const step = Math.PI / spikes;
+        ctx.moveTo(x, y - outerR);
+        for (let i = 0; i < spikes; i++) {
+          ctx.lineTo(x + Math.cos(rot) * outerR, y + Math.sin(rot) * outerR);
+          rot += step;
+          ctx.lineTo(x + Math.cos(rot) * innerR, y + Math.sin(rot) * innerR);
+          rot += step;
+        }
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+        if (stroke) {
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawLuna() {
+        if (luna.invuln > 0 && Math.floor(luna.invuln / 5) % 2 === 0) return;
+        const cx = luna.x + luna.w / 2;
+        const top = luna.y;
+
+        // Soft golden aura
+        const glow = ctx.createRadialGradient(cx, top + 22, 4, cx, top + 22, 34);
+        glow.addColorStop(0, "rgba(255, 212, 100, 0.35)");
+        glow.addColorStop(1, "rgba(255, 121, 198, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(cx, top + 22, 34, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Magical dress (pink-to-lavender)
+        const dressGrad = ctx.createLinearGradient(cx, top + 16, cx, top + 42);
+        dressGrad.addColorStop(0, "#ff8ad4");
+        dressGrad.addColorStop(1, "#9d6bff");
+        ctx.fillStyle = dressGrad;
+        ctx.beginPath();
+        ctx.moveTo(cx - 6, top + 18);
+        ctx.lineTo(cx + 6, top + 18);
+        ctx.lineTo(cx + 13, top + 41);
+        ctx.lineTo(cx - 13, top + 41);
+        ctx.closePath();
+        ctx.fill();
+
+        // Cute head
+        ctx.fillStyle = "#ffe6dc";
+        ctx.beginPath();
+        ctx.arc(cx, top + 11, 9.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Lavender/indigo hair + twin star buns
+        ctx.fillStyle = "#3b1d7a";
+        ctx.beginPath();
+        ctx.arc(cx, top + 9, 10, Math.PI, 0);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx - 10, top + 7, 4.5, 0, Math.PI * 2);
+        ctx.arc(cx + 10, top + 7, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Golden hair star pin
+        drawStarShape(cx + luna.facing * 4, top + 2, 5, 4.5, 2, "#ffd464");
+
+        // Eyes
+        ctx.fillStyle = "#1b0b38";
+        ctx.beginPath();
+        ctx.arc(cx + luna.facing * 2 - 2.5, top + 11.5, 1.5, 0, Math.PI * 2);
+        ctx.arc(cx + luna.facing * 2 + 2.5, top + 11.5, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Star lantern staff
+        const staffX = cx + luna.facing * 14;
+        ctx.strokeStyle = "#ffd464";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(staffX, top + 14);
+        ctx.lineTo(staffX, top + 42);
+        ctx.stroke();
+        drawStarShape(staffX, top + 12, 5, 6.5, 3, "#fff0a8", "#ff79c6");
+      }
+
+      function render() {
+        const lvl = currentLevel();
+        ctx.save();
+
+        if (state.shake > 0.5) {
+          ctx.translate((Math.random() - 0.5) * state.shake, (Math.random() - 0.5) * state.shake);
+        }
+
+        // Sky gradient
+        const sky = ctx.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, lvl.palette.top);
+        sky.addColorStop(0.55, lvl.palette.mid);
+        sky.addColorStop(1, lvl.palette.bot);
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, W, H);
+
+        // Twinkling stars
+        bgStars.forEach(s => {
+          s.twinkle += 0.03 * s.speed;
+          const alpha = 0.35 + 0.65 * Math.abs(Math.sin(s.twinkle));
+          ctx.fillStyle = `rgba(255, 240, 200, ${alpha.toFixed(2)})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Distant moon / dream orb
+        const moonGrad = ctx.createRadialGradient(780, 95, 8, 780, 95, 68);
+        moonGrad.addColorStop(0, "#fff8d6");
+        moonGrad.addColorStop(0.45, "rgba(255, 212, 100, 0.45)");
+        moonGrad.addColorStop(1, "rgba(255, 121, 198, 0)");
+        ctx.fillStyle = moonGrad;
+        ctx.beginPath();
+        ctx.arc(780, 95, 68, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Platforms
+        lvl.platforms.forEach(p => {
+          const grad = ctx.createLinearGradient(p.x, p.y, p.x, p.y + p.h);
+          if (p.kind === "crystal") {
+            grad.addColorStop(0, "#7dd3fc");
+            grad.addColorStop(1, "#5b21b6");
+          } else if (p.kind === "cloud") {
+            grad.addColorStop(0, "#fce7f3");
+            grad.addColorStop(1, "#a855f7");
+          } else {
+            grad.addColorStop(0, "#f472b6");
+            grad.addColorStop(1, "#2e1065");
+          }
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.roundRect(p.x, p.y, p.w, p.h, 8);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255, 240, 168, 0.45)";
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        });
+
+        // Portal / Star Gate
+        const pt = lvl.portal;
+        ctx.save();
+        ctx.globalAlpha = pt.active ? 0.95 : 0.28;
+        const pGrad = ctx.createRadialGradient(pt.x + pt.w / 2, pt.y + pt.h / 2, 4, pt.x + pt.w / 2, pt.y + pt.h / 2, 34);
+        pGrad.addColorStop(0, "#fff6cc");
+        pGrad.addColorStop(0.5, "#ff79c6");
+        pGrad.addColorStop(1, "rgba(125, 211, 252, 0)");
+        ctx.fillStyle = pGrad;
+        ctx.beginPath();
+        ctx.arc(pt.x + pt.w / 2, pt.y + pt.h / 2, 34, 0, Math.PI * 2);
+        ctx.fill();
+        drawStarShape(pt.x + pt.w / 2, pt.y + pt.h / 2, 5, 16, 7, pt.active ? "#ffd464" : "#64748b");
+        ctx.restore();
+
+        // Magical Stars
+        lvl.stars.forEach(star => {
+          if (star.collected) return;
+          const sy = star.y + Math.sin(star.bob) * 5;
+          drawStarShape(star.x, sy, 5, 15, 7, "#ffd464", "#fff6cc");
+        });
+
+        // Butterflies
+        lvl.butterflies.forEach(bf => {
+          if (bf.collected) return;
+          const bx = bf.x + Math.cos(bf.phase) * 10;
+          const by = bf.y + Math.sin(bf.phase * 1.4) * 7;
+          const wing = 4 + Math.abs(Math.sin(bf.phase * 3)) * 5;
+          ctx.fillStyle = "#ff8ad4";
+          ctx.beginPath();
+          ctx.ellipse(bx - wing / 2, by, wing, 4, -0.3, 0, Math.PI * 2);
+          ctx.ellipse(bx + wing / 2, by, wing, 4, 0.3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Level 4 Moon Crystal
+        if (lvl.crystal) {
+          const c = lvl.crystal;
+          ctx.save();
+          ctx.fillStyle = c.activated ? "#ffd464" : "#60a5fa";
+          ctx.beginPath();
+          ctx.moveTo(c.x, c.y - c.r);
+          ctx.lineTo(c.x + c.r * 0.7, c.y);
+          ctx.lineTo(c.x, c.y + c.r);
+          ctx.lineTo(c.x - c.r * 0.7, c.y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = "#fff6cc";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Level 4 Dark Shadow Boss
+        if (lvl.shadowBoss && !lvl.shadowBoss.defeated) {
+          const b = lvl.shadowBoss;
+          ctx.save();
+          ctx.fillStyle = b.stunTimer > 0 ? "#7e22ce" : "#120624";
+          ctx.beginPath();
+          ctx.arc(b.x + b.w / 2, b.y + b.h / 2, b.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#ff79c6";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          // Glowing eyes
+          ctx.fillStyle = "#ff4d6d";
+          ctx.beginPath();
+          ctx.arc(b.x + 22, b.y + 26, 4, 0, Math.PI * 2);
+          ctx.arc(b.x + 42, b.y + 26, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Hazards (Shadow Wisps)
+        lvl.hazards.forEach(h => {
+          ctx.save();
+          ctx.fillStyle = "#1b0936";
+          ctx.beginPath();
+          ctx.arc(h.x + h.w / 2, h.y + h.h / 2, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = "#c084fc";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        // Pulse Rings
+        pulseRings.forEach(r => {
+          ctx.save();
+          ctx.strokeStyle = `rgba(255, 212, 100, ${r.alpha.toFixed(2)})`;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        // Particles
+        particles.forEach(p => {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        // Luna
+        drawLuna();
+
+        // Floating Banner
+        if (state.bannerTimer > 0 && state.bannerText) {
+          ctx.save();
+          ctx.globalAlpha = Math.min(1, state.bannerTimer / 25);
+          ctx.fillStyle = "rgba(18, 9, 44, 0.82)";
+          ctx.beginPath();
+          ctx.roundRect(W / 2 - 230, 58, 460, 34, 999);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255, 212, 100, 0.5)";
+          ctx.stroke();
+          ctx.fillStyle = "#fff0a8";
+          ctx.font = "700 13px system-ui, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(state.bannerText, W / 2, 79);
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      function loop() {
+        update();
+        render();
+        requestAnimationFrame(loop);
+      }
+
+      // Keyboard Controls
+      window.addEventListener("keydown", e => {
+        if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"].includes(e.code)) {
+          e.preventDefault();
+        }
+        if (e.code === "ArrowLeft" || e.code === "KeyA") keys.left = true;
+        if (e.code === "ArrowRight" || e.code === "KeyD") keys.right = true;
+        if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") {
+          if (!keys.jump) keys.jumpPressed = true;
+          keys.jump = true;
+        }
+        if (e.code === "KeyE" || e.code === "ShiftLeft" || e.code === "ShiftRight") {
+          keys.pulsePressed = true;
+        }
+        if (e.code === "KeyP") {
+          if (state.mode === "playing") pauseGame();
+          else if (state.mode === "paused") resumeGame();
+        }
+      });
+
+      window.addEventListener("keyup", e => {
+        if (e.code === "ArrowLeft" || e.code === "KeyA") keys.left = false;
+        if (e.code === "ArrowRight" || e.code === "KeyD") keys.right = false;
+        if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") keys.jump = false;
+      });
+
+      // Touch Controls
+      function bindTouch(id, onDown, onUp) {
+        const el = document.getElementById(id);
+        const start = e => {
+          e.preventDefault();
+          el.classList.add("pressed");
+          onDown();
+        };
+        const end = e => {
+          e.preventDefault();
+          el.classList.remove("pressed");
+          onUp();
+        };
+        el.addEventListener("touchstart", start, { passive: false });
+        el.addEventListener("touchend", end, { passive: false });
+        el.addEventListener("touchcancel", end, { passive: false });
+      }
+
+      bindTouch("t-left", () => (keys.left = true), () => (keys.left = false));
+      bindTouch("t-right", () => (keys.right = true), () => (keys.right = false));
+      bindTouch(
+        "t-jump",
+        () => {
+          if (!keys.jump) keys.jumpPressed = true;
+          keys.jump = true;
+        },
+        () => (keys.jump = false)
+      );
+      bindTouch("t-pulse", () => (keys.pulsePressed = true), () => {});
+
+      // Buttons
+      function startGame() {
+        startScreen.classList.add("hidden");
+        pauseScreen.classList.add("hidden");
+        gameoverScreen.classList.add("hidden");
+        victoryScreen.classList.add("hidden");
+        hud.classList.add("active");
+        touchControls.classList.add("active");
+        state.mode = "playing";
+        loadLevel(0, false);
+      }
+
+      function pauseGame() {
+        if (state.mode !== "playing") return;
+        state.mode = "paused";
+        pauseScreen.classList.remove("hidden");
+      }
+
+      function resumeGame() {
+        if (state.mode !== "paused") return;
+        state.mode = "playing";
+        pauseScreen.classList.add("hidden");
+      }
+
+      btnStart.addEventListener("click", startGame);
+      btnPause.addEventListener("click", pauseGame);
+      btnResume.addEventListener("click", resumeGame);
+      btnRestart.addEventListener("click", startGame);
+      btnPauseRestart.addEventListener("click", startGame);
+      btnRetry.addEventListener("click", startGame);
+      btnPlayAgain.addEventListener("click", startGame);
+
+      // Initial render
+      loadLevel(0, false);
+      state.mode = "start";
+      hud.classList.remove("active");
+      touchControls.classList.remove("active");
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
