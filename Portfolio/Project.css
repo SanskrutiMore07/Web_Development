@@ -1,0 +1,214 @@
+/* =========================
+   Projects Section
+========================= */
+body{
+    margin: 0%;
+    height: 100%;
+    width: 100%;
+    background-image: url('portfolio img.avif');
+    
+}
+.projects-section {
+    padding: 80px 7%;
+}
+
+.projects-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Section Heading */
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-size: 38px;
+    color: #17324d;
+    margin-bottom: 10px;
+}
+
+.section-title h2::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: #39a9db;
+    margin: 12px auto;
+    border-radius: 10px;
+}
+
+.section-title p {
+    color: #5f6f7a;
+    font-size: 16px;
+}
+
+
+/* Projects Grid */
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+
+/* Project Card */
+
+.project-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid #dceaf2;
+
+    box-shadow: 0 10px 25px rgba(38, 90, 120, 0.10);
+
+    transition: all 0.3s ease;
+}
+
+
+/* Hover Effect */
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 18px 35px rgba(38, 90, 120, 0.18);
+}
+
+
+/* Icon */
+
+.project-icon {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e4f6f5;
+    border-radius: 15px;
+
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+
+/* Project Title */
+
+.project-card h3 {
+    color: #17324d;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+
+/* Description */
+
+.project-card p {
+    color: #667781;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+
+/* Technologies */
+
+.technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.technologies span {
+    background: #e7f5fb;
+    color: #1677a7;
+
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Button */
+
+.project-btn {
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    background: #39a9db;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.project-btn:hover {
+    background: #2386b5;
+}
+
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 768px) {
+
+    .projects-section {
+        padding: 60px 5%;
+    }
+
+    .section-title h2 {
+        font-size: 32px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 480px) {
+
+    .projects-section {
+        padding: 50px 20px;
+    }
+
+    .section-title h2 {
+        font-size: 28px;
+    }
+
+    .section-title p {
+        font-size: 14px;
+    }
+
+    .project-card {
+        padding: 22px;
+    }
+
+    .project-card h3 {
+        font-size: 19px;
+    }
+
+    .project-card p {
+        font-size: 14px;
+    }
+
+}

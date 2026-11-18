@@ -1,0 +1,372 @@
+/* ================= GENERAL ================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background-image: url("portfolio img.avif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    background-attachment: fixed;
+}
+
+
+/* ================= HEADER ================= */
+
+#menu {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 60px;
+
+    border-bottom: 2px solid black;
+
+    background-color: rgba(255, 228, 196, 0.85);
+}
+
+
+/* Title */
+
+.title {
+    flex: 1;
+
+    text-align: center;
+
+    font-family: 'Times New Roman', Times, serif;
+
+    font-size: 50px;
+
+    color: darkblue;
+}
+
+.title span {
+    color: rgb(180, 120, 20);
+}
+
+
+/* ================= BACK BUTTON ================= */
+
+.back-btn {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    background-color: rgb(237, 175, 50);
+
+    color: black;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+    border: 2px solid black;
+
+    transition: 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: black;
+    color: white;
+
+    transform: translateX(-5px);
+}
+
+
+/* ================= ABOUT SECTION ================= */
+
+#about {
+    width: 100%;
+
+    padding: 70px 20px;
+}
+
+
+/* Main Container */
+
+.about-container {
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 80px;
+}
+
+
+/* ================= IMAGE ================= */
+
+.col-left {
+    width: 350px;
+
+    display: flex;
+
+    justify-content: center;
+}
+
+.about-img {
+    position: relative;
+
+    width: 280px;
+    height: 350px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Image */
+
+.about-img img {
+    width: 260px;
+    height: 330px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    border: 5px solid white;
+
+    position: relative;
+
+    z-index: 2;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Image Border Effect */
+
+.about-img::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 330px;
+
+    left: 0;
+    top: 20px;
+
+    border: 6px solid rgb(237, 215, 215);
+
+    border-radius: 10px;
+
+    z-index: 1;
+}
+
+
+/* ================= RIGHT CONTENT ================= */
+
+.col-right {
+    flex: 1;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    background-color: rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(4px);
+
+    border: 2px solid white;
+}
+
+
+/* Name */
+
+.col-right h2 {
+    color: lightblue;
+
+    font-size: 35px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Paragraph */
+
+.col-right p {
+    color: white;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    margin-bottom: 25px;
+}
+
+
+/* ================= RESUME BUTTON ================= */
+
+.resume-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 25px;
+
+    background-color: black;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 17px;
+
+    border: 2px solid white;
+
+    border-radius: 10px;
+
+    transition: 0.3s ease;
+}
+
+.resume-btn:hover {
+    background-color: rgb(237, 175, 50);
+
+    color: black;
+
+    border-color: black;
+
+    transform: translateY(-3px);
+}
+
+
+/* ================= TABLET ================= */
+
+@media (max-width: 900px) {
+
+    #menu {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 40px;
+    }
+
+    .about-container {
+        gap: 40px;
+    }
+
+    .col-left {
+        width: 300px;
+    }
+
+    .col-right h2 {
+        font-size: 30px;
+    }
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+
+    #menu {
+        flex-direction: column;
+
+        gap: 15px;
+
+        padding: 20px 10px;
+    }
+
+    .title {
+        font-size: 38px;
+    }
+
+    .back-btn {
+        font-size: 16px;
+    }
+
+
+    #about {
+        padding: 40px 15px;
+    }
+
+
+    .about-container {
+        flex-direction: column;
+
+        gap: 40px;
+    }
+
+
+    .col-left {
+        width: 100%;
+    }
+
+
+    .col-right {
+        width: 100%;
+
+        padding: 25px 20px;
+
+        text-align: center;
+    }
+
+
+    .col-right h2 {
+        font-size: 28px;
+    }
+
+
+    .col-right p {
+        font-size: 14px;
+
+        line-height: 1.7;
+    }
+
+
+    .about-img {
+        width: 270px;
+        height: 340px;
+    }
+
+
+    .about-img img {
+        width: 240px;
+        height: 310px;
+    }
+
+
+    .about-img::after {
+        width: 240px;
+        height: 310px;
+    }
+
+
+    .resume-btn {
+        font-size: 15px;
+
+        padding: 10px 20px;
+    }
+}

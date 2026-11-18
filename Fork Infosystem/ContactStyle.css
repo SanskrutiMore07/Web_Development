@@ -1,0 +1,111 @@
+.main_Div{
+border: 1px solid black;
+width: 100%;
+background-color: rgb(233, 234, 250);
+display: flex;
+flex-wrap: wrap;
+}
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0; /* space between containers */}
+.ContainreBox{
+    width: 40%;
+    border: 1px solid black;
+    margin: 50px;
+    flex-wrap: wrap;
+    border-radius: 15px;
+    
+  box-shadow: 0px 2px 5px rgba(45, 6, 186, 0.2);
+}
+.containt{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 15px;
+  margin: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+}
+.containt:hover{
+  cursor: pointer;
+  background-color: navy;
+  color: white;
+  border-radius: 20px;
+}
+#messages{
+  width: 90%;
+  margin-left: 25px;
+  margin-right: 10px;
+}
+.form{
+  padding: 10px;
+}
+ .form .ipfild{
+margin-bottom: 15px;
+display: flex;
+align-items: center;
+}
+ .form .ipfild lable{
+margin-right: 10px;
+width: 200px;
+}
+ .form .ipfild input{
+    width: 100%;
+    outline: none;
+    border: 2px solid rgb(166, 166, 9);
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.form .ipfild .selectbox{
+    border: 2px solid rgb(166, 166, 9); 
+    width: 100%;
+    position: relative;
+     padding: 5px 10px;
+    border-radius: 3px;
+}
+.form .ipfild.selectbox select{
+  border: 2px solid rgb(166, 166, 9);
+}
+.form .ipfild textarea{
+    width: 100%;
+    outline: none;
+    border: 2px solid rgb(166, 166, 9);
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+ .form .ipfild .btn
+{
+    width: 100%;
+    padding: 4px 10px;
+    font-size: 25px;
+    background-color: rgb(233, 245, 169);
+    color: rgb(24, 118, 24);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 7px;
+}
+ .form .ipfild .btn:hover{
+    cursor: pointer;
+    background-color: rgb(233, 245, 169);
+    border:1px solid green;
+    border-radius: 7px;
+    color: rgb(64, 1, 1);
+}
+@media(max-width:410px)
+{
+ .form .ipfild
+ {
+    flex-direction: column;
+    align-items: flex-start;
+ }
+  .form .ipfild lable
+  {
+    margin-bottom: 5px;
+  }
+}

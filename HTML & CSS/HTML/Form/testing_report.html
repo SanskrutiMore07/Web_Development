@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanskruti - Inventory Testing Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1c2330;
+            line-height: 1.6;
+            margin: 40px auto;
+            max-width: 1000px;
+        }
+        h1 {
+            color: #059669;
+            text-align: center;
+            border-bottom: 2px solid #059669;
+            padding-bottom: 10px;
+        }
+        .header-info {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: #5b6472;
+        }
+        .module-title {
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f6f7f9;
+            padding: 10px;
+            border-left: 5px solid #059669;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #cfd3d9;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #059669;
+            color: white;
+            font-weight: 600;
+        }
+        .empty-cell {
+            width: 12%;
+        }
+        .crosscheck-section {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .crosscheck-section h2 {
+            color: #1e3a8a;
+            margin-top: 0;
+            font-size: 18px;
+        }
+        .crosscheck-section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #1e3a8a;
+        }
+        .crosscheck-section li {
+            margin-bottom: 8px;
+        }
+        @media print {
+            body { margin: 0; padding: 20px; }
+            th { background-color: #059669 !important; color: white !important; -webkit-print-color-adjust: exact; }
+            .module-title { background-color: #f6f7f9 !important; -webkit-print-color-adjust: exact; }
+            .crosscheck-section { background-color: #eff6ff !important; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kwikza Manual Testing Report</h1>
+    <div class="header-info">
+        <strong>Module:</strong> Inventory & Product Catalog <br>
+        <strong>Owner:</strong> Sanskruti
+    </div>
+
+    <!-- Feature 1 -->
+    <div class="module-title">1. Menu & Category Listing</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Test Scenarios / Test Cases</th>
+                <th style="width: 34%;">Expected Result</th>
+                <th class="empty-cell">Actual Result</th>
+                <th class="empty-cell">Pass / Fail</th>
+                <th class="empty-cell">Bug Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Verify total items count matches actual items in shop.</td>
+                <td>Count (e.g., 65 Items) should exactly match the sum of all category items.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Verify category-wise item count.</td>
+                <td>Starter (18), Main Veg (10) etc. should show correct item counts.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Search items using the search bar.</td>
+                <td>Relevant items should filter accurately based on keywords.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Check 'Grid view' and 'List view' toggles.</td>
+                <td>Layout should switch smoothly without breaking UI.</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Feature 2 -->
+    <div class="module-title">2. Add New Item & Image Uploads</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Test Scenarios / Test Cases</th>
+                <th style="width: 34%;">Expected Result</th>
+                <th class="empty-cell">Actual Result</th>
+                <th class="empty-cell">Pass / Fail</th>
+                <th class="empty-cell">Bug Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Click '+ Add' button and fill mandatory fields (Category, Item Name).</td>
+                <td>Item should be saved successfully.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Upload product image (up to 8 images, max 10MB).</td>
+                <td>Image should upload, save, and display correctly on the product card.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Try adding an item without selecting a category.</td>
+                <td>System should show error: "Please select an item in the list."</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Feature 3 -->
+    <div class="module-title">3. Product Variants & Stock Management</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Test Scenarios / Test Cases</th>
+                <th style="width: 34%;">Expected Result</th>
+                <th class="empty-cell">Actual Result</th>
+                <th class="empty-cell">Pass / Fail</th>
+                <th class="empty-cell">Bug Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Open an item (e.g., Achari Chicken Tikka) and check variants.</td>
+                <td>Variant list should open with correct prices and SKUs.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Search variants by SKU or attributes.</td>
+                <td>Only matching variants should be displayed.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Click 'Mark out of stock' on a variant.</td>
+                <td>Status should immediately update to out-of-stock.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Add a new variant with unique SKU and price.</td>
+                <td>Variant should be saved and variant count should increase.</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Feature 4 -->
+    <div class="module-title">4. Category Markup & Discounts</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Test Scenarios / Test Cases</th>
+                <th style="width: 34%;">Expected Result</th>
+                <th class="empty-cell">Actual Result</th>
+                <th class="empty-cell">Pass / Fail</th>
+                <th class="empty-cell">Bug Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Apply a % Markup (e.g., 20%) to a category.</td>
+                <td>All item prices in that category should increase by 20%.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Apply a Flat Amount Discount to a category.</td>
+                <td>Prices should decrease by the exact flat amount.</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Feature 5 -->
+    <div class="module-title">5. AI Features (Menu & Stock Scan)</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30%;">Test Scenarios / Test Cases</th>
+                <th style="width: 34%;">Expected Result</th>
+                <th class="empty-cell">Actual Result</th>
+                <th class="empty-cell">Pass / Fail</th>
+                <th class="empty-cell">Bug Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Use AI Menu Scan.</td>
+                <td>Should parse physical menu into digital products correctly.</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td>Use AI Menu/Stock scan with insufficient wallet balance.</td>
+                <td>Should block scan and show a clear wallet-recharge prompt.</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Cross Functional Checks -->
+    <div class="crosscheck-section">
+        <h2>Cross-Functional Checks (Dependencies)</h2>
+        <ul>
+            <li><strong>Customer Shop (Komal):</strong> After adding/editing a product, check it appears with the right name, price, and image on the customer shop page.</li>
+            <li><strong>POS (Niharika):</strong> Newly added items should be available for billing on the POS.</li>
+            <li><strong>Stock Blocking:</strong> After marking a product 'out of stock', check it is actually blocked from being added to the cart (Customer Shop) and from being sold on POS.</li>
+            <li><strong>Wallet Deduction (Abhijit):</strong> After running an AI scan, check exactly ₹6 (menu scan) or ₹4 (stock scan) is deducted from the wallet balance.</li>
+            <li><strong>Reports (Sakshi):</strong> After performing a bulk delete, confirm the deleted items disappear from the live product list as well as the Inventory report.</li>
+        </ul>
+    </div>
+
+</body>
+</html>
